@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linha do Tempo Interativa - Harmonia na MPB</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'bossa-yellow': '#F4D068',
+                        'bossa-gold': '#D9A036',
+                        'samba-red': '#A83232',
+                        'samba-wood': '#5A3825',
+                        'rio-blue': '#2A6F97',
+                        'sand-beige': '#F7F3E9',
+                        'sepia-dark': '#2B231D',
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Poppins"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F7F3E9;
+            color: #2B231D;
+            background-image: radial-gradient(#D9A036 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            background-opacity: 0.15;
+        }
+
+        /* Calçadão de Copacabana Wave Pattern */
+        .copacabana-bg {
+            background: repeating-linear-gradient(
+                45deg,
+                #2B231D,
+                #2B231D 20px,
+                #F7F3E9 20px,
+                #F7F3E9 40px
+            );
+            opacity: 0.08;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F7F3E9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9A036;
+            border-radius: 4px;
+        }
+
+        .interactive-svg-item {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+        }
+        .interactive-svg-item:hover {
+            transform: translateY(-8px) scale(1.05);
+            filter: drop-shadow(0 12px 16px rgba(90, 56, 37, 0.3));
+        }
+
+        /* Pulse effect for timeline nodes */
+        @keyframes subtle-pulse {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.08); opacity: 1; }
+        }
+        .pulse-node {
+            animation: subtle-pulse 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-bossa-yellow selection:text-samba-wood">
+
+    <!-- Copacabana Wave Decorative Header Bar -->
+    <div class="h-3 w-full bg-samba-wood flex">
+        <div class="h-full w-1/3 bg-bossa-yellow"></div>
+        <div class="h-full w-1/3 bg-samba-red"></div>
+        <div class="h-full w-1/3 bg-rio-blue"></div>
+    </div>
+
+    <!-- Header / Hero Section -->
+    <header class="relative px-6 pt-10 pb-6 max-w-6xl mx-auto text-center">
+        <div class="inline-block bg-bossa-yellow/30 text-samba-wood border border-bossa-gold/40 text-xs font-semibold px-4 py-1.5 rounded-full mb-3 tracking-widest uppercase">
+            Curso de Harmonia da Música Popular Brasileira • VA1
+        </div>
+        <h1 class="font-serif text-4xl sm:text-6xl font-extrabold text-samba-wood tracking-tight leading-tight mb-3">
+            Caminhos da Harmonia na MPB
+        </h1>
+        <p class="text-base sm:text-lg text-sepia-dark/80 max-w-2xl mx-auto font-light leading-relaxed">
+            Uma jornada interativa pelos 10 marcos históricos e teóricos do desenvolvimento harmônico nacional — do Choro ao Método de Ian Guest.
+        </p>
+        <p class="text-xs text-samba-wood/70 italic mt-2">
+            💡 Clique nos elementos ilustrados ou na linha do tempo abaixo para tocar ritmos e explorar os conteúdos.
+        </p>
+    </header>
+
+    <!-- Main Interactive Canvas / Scene Section -->
+    <main class="max-w-6xl mx-auto px-4 w-full flex-grow flex flex-col justify-center my-4">
+        
+        <!-- Rio Silhouette & Cultural Elements Container -->
+        <div class="relative bg-gradient-to-b from-rio-blue/10 via-sand-beige to-sand-beige rounded-3xl p-6 sm:p-10 border border-bossa-gold/30 shadow-xl overflow-hidden">
+            
+            <!-- Rio De Janeiro Silhouette Background (Morro da Urca / Pão de Açúcar & Corcovado) -->
+            <div class="absolute bottom-0 left-0 right-0 h-48 pointer-events-none opacity-20 flex items-end justify-between px-4">
+                <svg viewBox="0 0 1200 300" class="w-full h-full fill-samba-wood">
+                    <!-- Morros e Cristo Redentor Silhouette -->
+                    <path d="M0,300 L0,220 Q150,120 300,200 Q450,280 600,150 Q750,20 850,180 Q950,220 1050,100 Q1120,40 1200,160 L1200,300 Z" />
+                    <!-- Corcovado Cross/Statue Silhouette -->
+                    <path d="M600,150 L600,120 M590,130 L610,130" stroke="#5A3825" stroke-width="4" stroke-linecap="round" />
+                </svg>
+            </div>
+
+            <!-- Calçadão Wave Pattern Bottom Strip -->
+            <div class="absolute bottom-0 left-0 right-0 h-6 copacabana-bg border-t border-samba-wood/20"></div>
+
+            <!-- Interactive Icons Grid / Panorama -->
+            <div class="relative z-10 grid grid-cols-2 sm:grid-cols-5 gap-6 sm:gap-4 items-center justify-items-center py-6">
+                
+                <!-- Item 1: Pandeiro (Choro & Samba) -->
+                <div onclick="openEvent(1); playSound('pandeiro');" class="interactive-svg-item flex flex-col items-center text-center group">
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 bg-sand-beige rounded-full border-2 border-bossa-gold p-3 shadow-md group-hover:border-samba-red relative flex items-center justify-center">
+                        <span class="absolute -top-2 -right-2 bg-samba-red text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">1</span>
+                        <!-- Pandeiro SVG -->
+                        <svg viewBox="0 0 100 100" class="w-full h-full fill-samba-wood">
+                            <circle cx="50" cy="50" r="42" fill="#E6D3A7" stroke="#5A3825" stroke-width="5"/>
+                            <circle cx="50" cy="50" r="34" fill="none" stroke="#D9A036" stroke-dasharray="3 3"/>
+                            <!-- Platinelas -->
+                            <circle cx="50" cy="10" r="5" fill="#D9A036"/>
+                            <circle cx="90" cy="50" r="5" fill="#D9A036"/>
+                            <circle cx="50" cy="90" r="5" fill="#D9A036"/>
+                            <circle cx="10" cy="50" r="5" fill="#D9A036"/>
+                            <circle cx="22" cy="22" r="5" fill="#D9A036"/>
+                            <circle cx="78" cy="22" r="5" fill="#D9A036"/>
+                            <circle cx="78" cy="78" r="5" fill="#D9A036"/>
+                            <circle cx="22" cy="78" r="5" fill="#D9A036"/>
+                        </svg>
+                    </div>
+                    <span class="mt-2 text-xs font-semibold text-samba-wood group-hover:text-samba-red">1870–1910<br/>Choro & Samba</span>
+                </div>
+
+                <!-- Item 2: Partitura & Rádio Vintage (Orquestrações & Baião) -->
+                <div onclick="openEvent(3); playSound('radio');" class="interactive-svg-item flex flex-col items-center text-center group">
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 bg-sand-beige rounded-full border-2 border-bossa-gold p-3 shadow-md group-hover:border-samba-red relative flex items-center justify-center">
+                        <span class="absolute -top-2 -right-2 bg-samba-red text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">3</span>
+                        <!-- Radio Vintage SVG -->
+                        <svg viewBox="0 0 100 100" class="w-full h-full">
+                            <rect x="15" y="30" width="70" height="50" rx="8" fill="#5A3825"/>
+                            <rect x="22" y="38" width="35" height="34" rx="4" fill="#E6D3A7"/>
+                            <!-- Radio Speaker lines -->
+                            <line x1="26" y1="45" x2="51" y2="45" stroke="#5A3825" stroke-width="2"/>
+                            <line x1="26" y1="52" x2="51" y2="52" stroke="#5A3825" stroke-width="2"/>
+                            <line x1="26" y1="59" x2="51" y2="59" stroke="#5A3825" stroke-width="2"/>
+                            <line x1="26" y1="66" x2="51" y2="66" stroke="#5A3825" stroke-width="2"/>
+                            <!-- Dials -->
+                            <circle cx="70" cy="48" r="7" fill="#D9A036"/>
+                            <circle cx="70" cy="66" r="7" fill="#D9A036"/>
+                            <!-- Antenna -->
+                            <line x1="30" y1="30" x2="15" y2="10" stroke="#5A3825" stroke-width="3"/>
+                        </svg>
+                    </div>
+                    <span class="mt-2 text-xs font-semibold text-samba-wood group-hover:text-samba-red">1930–1940<br/>Rádio & Baião</span>
+                </div>
+
+                <!-- Item 3: Violão de Náilon & Chapéu Panamá (Bossa Nova) -->
+                <div onclick="openEvent(5); playSound('bossaguitar');" class="interactive-svg-item flex flex-col items-center text-center group">
+                    <div class="w-28 h-28 sm:w-32 sm:h-32 bg-bossa-yellow/40 rounded-full border-4 border-bossa-gold p-3 shadow-lg group-hover:border-samba-red relative flex items-center justify-center pulse-node">
+                        <span class="absolute -top-1 -right-1 bg-samba-red text-white text-xs font-bold w-7 h-7 rounded-full flex items-center justify-center shadow">5</span>
+                        <!-- Violão + Chapéu Panamá SVG -->
+                        <svg viewBox="0 0 100 100" class="w-full h-full">
+                            <!-- Violão Body -->
+                            <path d="M50,25 C38,25 35,38 42,48 C32,54 30,75 44,85 C56,85 68,85 56,85 C70,75 68,54 58,48 C65,38 62,25 50,25 Z" fill="#D9A036" stroke="#5A3825" stroke-width="3"/>
+                            <circle cx="50" cy="62" r="8" fill="#5A3825"/>
+                            <line x1="50" y1="20" x2="50" y2="85" stroke="#F7F3E9" stroke-width="1.5"/>
+                            <!-- Chapéu Panamá Over Violão -->
+                            <path d="M25,30 Q50,15 75,30 Q85,32 75,35 Q50,38 25,35 Q15,32 25,30 Z" fill="#F7F3E9" stroke="#5A3825" stroke-width="2"/>
+                            <path d="M35,31 Q50,20 65,31 L63,22 Q50,18 37,22 Z" fill="#F7F3E9" stroke="#5A3825" stroke-width="2"/>
+                            <path d="M36,29 Q50,21 64,29" stroke="#A83232" stroke-width="3" fill="none"/>
+                        </svg>
+                    </div>
+                    <span class="mt-2 text-xs font-bold text-samba-wood group-hover:text-samba-red">1958<br/>Bossa Nova</span>
+                </div>
+
+                <!-- Item 4: Sol do Rio / Guitarras & Clube da Esquina -->
+                <div onclick="openEvent(8); playSound('clube');" class="interactive-svg-item flex flex-col items-center text-center group">
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 bg-sand-beige rounded-full border-2 border-bossa-gold p-3 shadow-md group-hover:border-samba-red relative flex items-center justify-center">
+                        <span class="absolute -top-2 -right-2 bg-samba-red text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">8</span>
+                        <!-- Sun & Mountains SVG -->
+                        <svg viewBox="0 0 100 100" class="w-full h-full">
+                            <circle cx="50" cy="40" r="20" fill="#F4D068" stroke="#D9A036" stroke-width="2"/>
+                            <!-- Rays -->
+                            <path d="M50,12 L50,5 M50,75 L50,68 M22,40 L15,40 M85,40 L78,40 M30,20 L25,15 M70,20 L75,15" stroke="#D9A036" stroke-width="3" stroke-linecap="round"/>
+                            <!-- Mountains -->
+                            <path d="M10,80 L35,45 L60,80 Z" fill="#2A6F97" opacity="0.8"/>
+                            <path d="M40,80 L65,50 L90,80 Z" fill="#5A3825"/>
+                        </svg>
+                    </div>
+                    <span class="mt-2 text-xs font-semibold text-samba-wood group-hover:text-samba-red">1970–1980<br/>Clube da Esquina</span>
+                </div>
+
+                <!-- Item 5: Partitura Método Ian Guest (Didática) -->
+                <div onclick="openEvent(10); playSound('book');" class="interactive-svg-item flex flex-col items-center text-center group">
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 bg-sand-beige rounded-full border-2 border-bossa-gold p-3 shadow-md group-hover:border-samba-red relative flex items-center justify-center">
+                        <span class="absolute -top-2 -right-2 bg-samba-red text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">10</span>
+                        <!-- Livro / Partitura Ian Guest SVG -->
+                        <svg viewBox="0 0 100 100" class="w-full h-full">
+                            <rect x="20" y="20" width="60" height="65" rx="4" fill="#F7F3E9" stroke="#5A3825" stroke-width="3"/>
+                            <line x1="30" y1="35" x2="70" y2="35" stroke="#5A3825" stroke-width="2"/>
+                            <line x1="30" y1="45" x2="70" y2="45" stroke="#5A3825" stroke-width="2"/>
+                            <line x1="30" y1="55" x2="70" y2="55" stroke="#5A3825" stroke-width="2"/>
+                            <!-- Clave de Sol estilizada / Nota Musical -->
+                            <path d="M40,68 C40,65 43,62 46,65 C49,68 45,73 40,70 L40,40 C40,35 55,30 55,42 C55,50 40,48 40,48" fill="none" stroke="#A83232" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span class="mt-2 text-xs font-semibold text-samba-wood group-hover:text-samba-red">1990–Hoje<br/>Método Ian Guest</span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Horizontal Timeline Bar (All 10 Events) -->
+        <div class="mt-8 bg-white/80 backdrop-blur rounded-2xl p-4 sm:p-6 border border-bossa-gold/40 shadow-md">
+            <h3 class="text-xs font-bold uppercase tracking-widest text-samba-wood/60 text-center mb-4">
+                Linha do Tempo Cronológica (Selecione qualquer evento de 1 a 10)
+            </h3>
+            
+            <div class="relative flex items-center justify-between max-w-4xl mx-auto px-2">
+                <!-- Line -->
+                <div class="absolute left-4 right-4 top-1/2 -translate-y-1/2 h-1 bg-bossa-gold/30 -z-0"></div>
+
+                <!-- 10 Timeline Buttons -->
+                <script>
+                    const eventShortTitles = [
+                        "Choro", "Samba", "Rádio", "Baião", "Bossa Nova", 
+                        "SubV7", "Tropicália", "Clube da Esquina", "TES", "Ian Guest"
+                    ];
+                    for (let i = 1; i <= 10; i++) {
+                        document.write(`
+                            <button onclick="openEvent(${i}); playSound('tick');" class="relative z-10 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-sand-beige border-2 border-bossa-gold hover:border-samba-red hover:bg-bossa-yellow text-samba-wood font-bold text-xs sm:text-sm transition-all shadow-sm hover:scale-110 flex flex-col items-center justify-center group">
+                                ${i}
+                                <span class="absolute top-12 hidden sm:block opacity-0 group-hover:opacity-100 transition-opacity bg-samba-wood text-sand-beige text-[10px] py-1 px-2 rounded whitespace-nowrap z-20 shadow">
+                                    ${eventShortTitles[i-1]}
+                                </span>
+                            </button>
+                        `);
+                    }
+                </script>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-samba-wood text-sand-beige text-center py-4 px-4 text-xs font-light">
+        <p>Harmonia da Música Popular Brasileira • Trabalho Acadêmico VA1</p>
+        <p class="text-bossa-yellow/80 text-[11px] mt-1">Desenvolvido para apresentação interativa no GitHub Pages</p>
+    </footer>
+
+    <!-- Modal / Card Slide-Over for Detailed Event View -->
+    <div id="eventModal" class="fixed inset-0 bg-sepia-dark/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-sand-beige border-2 border-bossa-gold rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative overflow-hidden transform scale-95 transition-transform duration-300" id="modalContent">
+            
+            <!-- Close Button -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-samba-wood/10 hover:bg-samba-red hover:text-white text-samba-wood font-bold flex items-center justify-center transition-colors">
+                ✕
+            </button>
+
+            <!-- Event Badge / Header -->
+            <div class="flex items-center gap-3 mb-3">
+                <span id="modalEventNum" class="bg-samba-red text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                    Evento 1
+                </span>
+                <span id="modalEventYear" class="text-sm font-semibold text-bossa-gold">
+                    1870
+                </span>
+            </div>
+
+            <!-- Event Title -->
+            <h2 id="modalEventTitle" class="font-serif text-2xl sm:text-3xl font-extrabold text-samba-wood mb-4">
+                Título do Evento
+            </h2>
+
+            <!-- Event Audio Action / Interactive Sound Button -->
+            <div class="mb-5 bg-bossa-yellow/30 border border-bossa-gold/40 rounded-xl p-3 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <button id="modalAudioBtn" onclick="playCurrentEventAudio()" class="w-10 h-10 rounded-full bg-samba-wood text-bossa-yellow flex items-center justify-center hover:bg-samba-red transition-colors shadow">
+                        ▶
+                    </button>
+                    <div>
+                        <p class="text-xs font-bold text-samba-wood">Ouvir Ilustração Rítmico-Harmônica</p>
+                        <p id="modalAudioDesc" class="text-[11px] text-sepia-dark/70">Síntese sonora em Web Audio API</p>
+                    </div>
+                </div>
+                <span class="text-[10px] font-mono text-samba-wood/60 bg-white/60 px-2 py-1 rounded">Sintetizador Web</span>
+            </div>
+
+            <!-- Event Historical Description -->
+            <div class="mb-4">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-samba-wood/60 mb-1">Contexto Histórico & Estilístico</h4>
+                <p id="modalEventDesc" class="text-sm text-sepia-dark leading-relaxed">
+                    Descrição histórica do evento.
+                </p>
+            </div>
+
+            <!-- Theoretical Concept Box (Integrado à VA1) -->
+            <div class="bg-white/80 border-l-4 border-bossa-gold p-4 rounded-r-xl shadow-sm mb-6">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-samba-red mb-1">Conceito Teórico Integrado</h4>
+                <p id="modalEventTheory" class="text-xs font-medium text-samba-wood leading-normal">
+                    Conceitos teóricos do curso.
+                </p>
+            </div>
+
+            <!-- Navigation Controls inside Modal -->
+            <div class="flex items-center justify-between pt-2 border-t border-bossa-gold/30">
+                <button onclick="navigateEvent(-1)" class="text-xs font-bold text-samba-wood hover:text-samba-red flex items-center gap-1">
+                    ← Evento Anterior
+                </button>
+                <span id="modalCounter" class="text-xs font-mono text-samba-wood/50">1 de 10</span>
+                <button onclick="navigateEvent(1)" class="text-xs font-bold text-samba-wood hover:text-samba-red flex items-center gap-1">
+                    Próximo Evento →
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Application Logic & Audio Engine -->
+    <script>
+        // Data for the 10 Events
+        const eventsData = [
+            {
+                number: 1,
+                year: "c. 1870",
+                title: "As Origens do Choro e a Harmonia Tonal Europeia",
+                desc: "O Choro surge no Rio de Janeiro a partir da apropriação brasileira das danças de salão europeias (como a polca e a valsa). A harmonia baseava-se estritamente no sistema tonal funcional europeu, pautada em cadências perfeitas (I - IV - V7 - I) e no uso do contraponto na 'baixaria' do violão de 7 cordas.",
+                theory: "Funcionalidade Tonal Básica (Tônica, Subdominante e Dominante) e Condução de Vozes no Baixo.",
+                audioRythm: "choro"
+            },
+            {
+                number: 2,
+                year: "1910s",
+                title: "Consolidação do Samba & Acordes Diminutos de Passagem",
+                desc: "Com a fixação do Samba urbano no Rio de Janeiro (marco de 'Pelo Telefone' em 1916), a harmonia popular passa a integrar acordes de passagem para conectar graus diatônicos, com forte presença dos acordes diminutos ascendentes e descendentes na condução harmônica dos regionais de cordas.",
+                theory: "Acordes Diminutos de Passagem (Ascendentes e Descendentes) e Auxiliares.",
+                audioRythm: "samba"
+            },
+            {
+                number: 3,
+                year: "1930s",
+                title: "A Era do Rádio & As Orquestrações com Dominantes Secundários",
+                desc: "A era do rádio e os arranjos orquestrais de nomes como Pixinguinha e Radamés Gnattali sofisticaram a canção popular. Passa-se a utilizar sistematicamente os dominantes secundários para preparar acordes diatônicos, ampliando a densidade funcional.",
+                theory: "Dominantes Secundários (V7/X) e Cadências Auxiliares (II - V).",
+                audioRythm: "radio"
+            },
+            {
+                number: 4,
+                year: "1940s",
+                title: "O Baião de Luiz Gonzaga & O Modalismo Nordestino",
+                desc: "Luiz Gonzaga e Humberto Teixeira nacionalizam o Baião no cenário fonográfico. A harmonia afasta-se da resolução funcional europeia rígida e abraça a linguagem modal sertaneja, caracterizada pelo uso do modo Mixolídio e do modo Lídio b7 (Modo Nordestino) sobre baixos pedais.",
+                theory: "Harmonia Modal, Modo Mixolídio, Modo Lídio b7 e Nota Característica.",
+                audioRythm: "baiao"
+            },
+            {
+                number: 5,
+                year: "1958",
+                title: "A Revolução da Bossa Nova & As Tensões Harmônicas",
+                desc: "Com o marco de 'Chega de Saudade' (Tom Jobim, Vinicius de Moraes e João Gilberto), a Bossa Nova funde o samba com a linguagem do jazz. Os acordes ganham extensões e tensões (9, #11, 13) e o violão adota a batida sincopada integrada à harmonia.",
+                theory: "Tensões em Acordes Maior/Menor (7M, 9, 11, 13) e Síncope Rítmico-Harmônica.",
+                audioRythm: "bossa"
+            },
+            {
+                number: 6,
+                year: "1960s",
+                title: "Empréstimo Modal (AEM) & O Dominante Substituto (SubV7)",
+                desc: "Compositores da Bossa Nova e MPB moderna passam a incorporar o Empréstimo Modal e o Dominante Substituto (SubV7) em frases marcantes, como o uso dos acordes bVII7 e bVI7M resolvendo no acorde I7M.",
+                theory: "Acordes de Empréstimo Modal (AEM), SubV7 e Resolução Tritonal.",
+                audioRythm: "subv7"
+            },
+            {
+                number: 7,
+                year: "Late 1960s",
+                title: "A Tropicália & A Fusão de Linguagens (Tonal x Pop/Rock)",
+                desc: "O movimento Tropicalista (Caetano, Gil, Mutantes, Rogério Duprat) introduz guitarras elétricas e arranjos eruditos vanguardistas. A harmonia mescla encadeamentos tonais com movimentos modais e paralelos típicos do rock pop e do folclore.",
+                theory: "Paralelismo Harmônico, Modulação Indireta e Ecletismo Funcional.",
+                audioRythm: "tropicalia"
+            },
+            {
+                number: 8,
+                year: "1970s",
+                title: "O Clube da Esquina & O Modalismo Mineiro",
+                desc: "Milton Nascimento, Lô Borges e o Clube da Esquina criam uma sonoridade única ao fundir Bossa Nova, rock psicodélico e música sacra. A harmonia é marcada pelo uso de acordes com baixos pedais, inversões complexas e sobreposição dos modos Dórico e Frígio.",
+                theory: "Acordes com Baixo Pedal, Polimodalismo e Condução de Vozes Invertidas.",
+                audioRythm: "clube"
+            },
+            {
+                number: 9,
+                year: "1980s",
+                title: "Sofisticação Instrumental & Tríades de Estrutura Superior (TES)",
+                desc: "Nomes como Djavan, Toninho Horta, Guinga e Hermeto Pascoal levam a MPB a um nível elevado de virtuosismo harmônico. As composições utilizam acordes alterados, escalas simétricas (dim-dom) e Tríades de Estrutura Superior (TES) sobre dominantes.",
+                theory: "Tríades de Estrutura Superior (TES), Dominantes Alterados e Escala Diminuta da Dominante (Dim-Dom).",
+                audioRythm: "tes"
+            },
+            {
+                number: 10,
+                year: "1990s–Hoje",
+                title: "Didática e Sistematização da HMPB (Método Ian Guest)",
+                desc: "A consolidação dos métodos acadêmicos de harmonia no Brasil (como a sistematização fundamental de Ian Guest) padronizou a análise funcional, a rearmonização e a pedagogia musical no país. A MPB contemporânea transita livremente entre a tradição funcional e a liberdade modal.",
+                theory: "Rearmonização, Análise Funcional Avançada e Codificação da Harmonia Popular.",
+                audioRythm: "ianguest"
+            }
+        ];
+
+        let currentEventIndex = 0;
+
+        // Modal Controls
+        function openEvent(eventNumber) {
+            currentEventIndex = eventNumber - 1;
+            updateModalContent();
+            
+            const modal = document.getElementById('eventModal');
+            const content = document.getElementById('modalContent');
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('eventModal');
+            const content = document.getElementById('modalContent');
+            
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function navigateEvent(direction) {
+            currentEventIndex += direction;
+            if (currentEventIndex < 0) currentEventIndex = eventsData.length - 1;
+            if (currentEventIndex >= eventsData.length) currentEventIndex = 0;
+            updateModalContent();
+            playCurrentEventAudio();
+        }
+
+        function updateModalContent() {
+            const data = eventsData[currentEventIndex];
+            document.getElementById('modalEventNum').innerText = `Evento ${data.number}`;
+            document.getElementById('modalEventYear').innerText = data.year;
+            document.getElementById('modalEventTitle').innerText = data.title;
+            document.getElementById('modalEventDesc').innerText = data.desc;
+            document.getElementById('modalEventTheory').innerText = data.theory;
+            document.getElementById('modalCounter').innerText = `${data.number} de 10`;
+        }
+
+        // Web Audio API Synthesizer Engine for MPB Rhythms/Chords
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(type) {
+            initAudio();
+            if (!audioCtx) return;
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'tick') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.exponentialRampToValueAtTime(200, now + 0.05);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.05);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            } 
+            else if (type === 'pandeiro') {
+                // Low thumb stroke + platinela noise
+                playPandeiroStroke(now, 120, 0.3);
+                playPlatinela(now + 0.1, 0.1);
+            }
+            else if (type === 'bossaguitar') {
+                // Bossa Nova Major 7/9 Chord Arpeggio (C7M(9))
+                const freqs = [261.63, 329.63, 392.00, 493.88, 587.33]; // C, E, G, B, D
+                freqs.forEach((f, idx) => {
+                    playGuitarNote(now + (idx * 0.06), f, 1.2);
+                });
+            }
+            else {
+                // Default pleasant chord sound
+                playGuitarNote(now, 261.63, 0.5);
+                playGuitarNote(now + 0.05, 329.63, 0.5);
+                playGuitarNote(now + 0.1, 392.00, 0.5);
+            }
+        }
+
+        function playGuitarNote(time, freq, duration) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, time);
+            
+            gain.gain.setValueAtTime(0.2, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + duration);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(time);
+            osc.stop(time + duration);
+        }
+
+        function playPandeiroStroke(time, pitch, dur) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(pitch, time);
+            osc.frequency.exponentialRampToValueAtTime(40, time + dur);
+            
+            gain.gain.setValueAtTime(0.4, time);
+            gain.gain.exponentialRampToValueAtTime(0.01, time + dur);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(time);
+            osc.stop(time + dur);
+        }
+
+        function playPlatinela(time, dur) {
+            // White noise simulation for jingles
+            const bufferSize = audioCtx.sampleRate * dur;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
+            }
+
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
+
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'highpass';
+            filter.frequency.value = 5000;
+
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.15, time);
+            gain.gain.exponentialRampToValueAtTime(0.01, time + dur);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            noise.start(time);
+        }
+
+        function playCurrentEventAudio() {
+            initAudio();
+            const now = audioCtx.currentTime;
+            
+            // Generate distinct chord progressions/rhythms per event index
+            if (currentEventIndex === 0) { // Choro
+                playGuitarNote(now, 220, 0.4);
+                playGuitarNote(now + 0.15, 277.18, 0.4);
+                playGuitarNote(now + 0.30, 329.63, 0.4);
+            } else if (currentEventIndex === 4) { // Bossa Nova C7M(9) -> C#dim -> Dm7 -> G7(b9)
+                const bossaChord = [261.63, 329.63, 493.88, 587.33];
+                bossaChord.forEach(f => playGuitarNote(now, f, 1.5));
+            } else if (currentEventIndex === 3) { // Baião / Modo Nordestino
+                playGuitarNote(now, 146.83, 0.8); // D low pedal
+                playGuitarNote(now + 0.1, 220.00, 0.6);
+                playGuitarNote(now + 0.2, 277.18, 0.6); // C#
+            } else {
+                playSound('bossaguitar');
+            }
+        }
+    </script>
+
+</body>
+</html>
